@@ -42,7 +42,7 @@ X-KDE-Submenu=Mount/Unmount iso image
 Name=Mount
 Icon=media-mount
 # Mount the file only if it is not already mounted
-Exec=sh -c 'FILE="%f"; LOOPDEV=$(losetup -j "$FILE" | cut -d ":" -f 1); if [ -z "$LOOPDEV" ]; then LOOPDEV=$(udisksctl loop-setup -r -f "$FILE" | grep -oE "/dev/loop[0-9]+"); fi; if lsblk -lno NAME | grep -q "^$(basename $LOOPDEV)p"; then for PARTITION in $(lsblk -lno NAME | grep "^$(basename $LOOPDEV)p"); do udisksctl mount -b "/dev/$PARTITION"; done; else udisksctl mount -b "$LOOPDEV"; fi'
+Exec=sh -c 'FILE="%f"; LOOPDEV=$(losetup -j "$FILE" | cut -d ":" -f 1); if [ -z "$LOOPDEV" ]; then LOOPDEV=$(udisksctl loop-setup -r -f "$FILE" | grep -oE "/dev/loop[0-9]+"); fi; if lsblk -lno NAME | grep -q "^$(basename $LOOPDEV)p"; then for PARTITION in $(lsblk -lno NAME | grep "^$(basename $LOOPDEV)p"); do udisksctl mount -b "/dev/$PARTITION"; done; else udisksctl mount -b "$LOOPDEV"; fi; xdg-open "$(mount | grep "$LOOPDEV" | awk '{print $3}')"; qdbus org.kde.dolphin /dolphin/Dolphin org.kde.dolphin.refresh; udisksctl info -b "$LOOPDEV"'
 
 
 [Desktop Action unmount]
